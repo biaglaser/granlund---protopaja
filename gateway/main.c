@@ -26,7 +26,7 @@
 
 #define UART_DEVICE_NODE DT_CHOSEN(zephyr_shell_uart)
 #define UART_DEVICE_NODE2 DT_NODELABEL(uart1)
-#define MSG_SIZE 32
+#define MSG_SIZE 140
 
 /* queue to store up to 10 messages (aligned to 4-byte boundary) */
 K_MSGQ_DEFINE(uart_msgq, MSG_SIZE, 10, 4);
@@ -40,9 +40,6 @@ static char rx_buf[MSG_SIZE];
 static int rx_buf_pos;
 static char rx_buf2[MSG_SIZE];
 static int rx_buf_pos2;
-
-
-
 
 
 char send_buf[1024]={0};
@@ -324,8 +321,10 @@ void http_post_payload(char *payload) {
 clean_up:
     freeaddrinfo(res);
     (void)close(fd);
-}
 
+}
+char uart_buffer[1024] = {0};  // Buffer to store UART messages
+int uart_buffer_size = 0;  // Size of data in the buffer
 
 void main(void)
 {
@@ -376,19 +375,23 @@ void main(void)
 
 	while(1)
 	{
-		if (k_msgq_get(&uart_msgq, &tx_buf, K_NO_WAIT) == 0) {
-			print_uart("Echo: ");
-			print_uart(tx_buf);
-			print_uart("\r\n");
-		}
 		if(k_msgq_get(&uart_msgq2, &tx_buf2, K_NO_WAIT) == 0) {
-			print_uart("Echo: ");
-			print_uart(tx_buf2);
-			print_uart("\r\n");
-			print_uart2("Echo: ");
-			print_uart2(tx_buf2);
-			print_uart2("\r\n");
-			http_post_payload(tx_buf2);
+
+            // Append received message to uart_buffer and update the size
+            int msg_len = strlen(tx_buf2);
+            if (uart_buffer_size + msg_len + 1 < sizeof(uart_buffer)) {  // +1 for '\n'
+                memcpy(uart_buffer + uart_buffer_size, tx_buf2, msg_len);
+                uart_buffer_size += msg_len;
+                uart_buffer[uart_buffer_size] = '\n';  // Separate messages by \n
+                uart_buffer_size++;
+            }
+
+            // If buffer is full, send it as a POST request
+            if (uart_buffer_size >= sizeof(uart_buffer) - 1) {
+                uart_buffer[uart_buffer_size] = '\0';  // Null-terminate the buffer
+                http_post_payload(uart_buffer);
+                uart_buffer_size = 0;  // Reset buffer size
+            }
 		}
 	}	
 }
