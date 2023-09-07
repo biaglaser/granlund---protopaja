@@ -1,0 +1,54 @@
+{% extends "base.html" %} {% block title %}Home Page{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1 class="mb-4">Last measurement made by your device</h1>
+  <div class="border p-4 rounded">      
+      <div class="row mb-3">
+          <div class="col-sm-2"><strong>Date:</strong></div>
+          <div class="col-sm-10" id="date">{{date}}</div>
+      </div>
+      <div class="row mb-3">
+          <div class="col-sm-2"><strong>Timestamp:</strong></div>
+          <div class="col-sm-10" id="time">{{time}} microseconds</div>
+      </div>
+      <div class="row mb-3">
+          <div class="col-sm-2"><strong>Sensor address:</strong></div>
+          <div class="col-sm-10" id="temperature">{{add}}</div>
+      </div>
+      <div class="row mb-3">
+          <div class="col-sm-2"><strong>Measured value:</strong></div>
+          <div class="col-sm-10" id="light-status">{{val}}</div>
+      </div>
+  </div>
+</div>
+
+
+<style>
+    /* Define the custom styles */
+    .content-box {
+        height: auto;  /* Container height adjusts according to the content inside */
+        overflow-y: auto;  /* Makes the box scrollable if content exceeds the height */
+    }
+</style>
+
+<div class="graphs">
+    {% for key in drawings %}
+    <div class="container mt-5">
+        <h5>GRAPH AND STATS - sensor station: {{key}}</h5>
+        <div class="row">
+            <div class="col-md-6 graph">
+                <dd><img class="img-fluid" style="max-width: 100%; height: auto;" title="Measured values by {{key}}" src="static/{{key}}_plot.png"></dd>
+            </div>
+
+            <div class="col-md-6 content-box">
+                {{ drawings[key] | safe }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}

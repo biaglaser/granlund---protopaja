@@ -1,0 +1,64 @@
+{% extends "base.html" %} {% block title %}Predictions{% endblock %}
+
+{% block content %}
+
+<br>
+<h1>Here you can see our maintenance predictions!</h1>
+
+<div class="predictions-content">
+    <div class="textboxes-container">
+        <div class="textbox">
+            <h4 class="card-title">Light</h4>
+            <div class="card-body">Based on the shelf-life of led lights and the records with previous brightness levels captured by the light sensor, we predict a malfunction or necessity for maintenance in</div>
+            <div class="maint-date">{{date[0]}}</div>
+        </div>
+
+        <div class="textbox">            
+            <h4 class="card-title">Temperature</h4>
+            <div class="card-body">Extreme material temperature of the tower and/or its components may cause a variety of risks to its structural health, such as: expansion and contraction of the material, variable strength, acceleration of corrosion and facilitation ice formation.<br>
+                These extreme values are more recurring during winter and summer peak times, therefore we recommend maintenance after frosting and extremely hot weather streaks.</div>
+        <!--<div class="maint-date">{{date}}</div> -->
+        </div>
+
+        <div class="textbox">            
+            <h4 class="card-title">Deflection</h4>
+            <div class="card-body">Deflection can be caused by weather events (strong winds, elevated pressure etc.) as well as own material weight. Great deflection values may be strainning on the tower foundation and damaging to its structural health.<br>
+                For that reason we recommend maintenance reviews after strong thunderstorms and or drastic weather changes.</div>
+        <!--<div class="maint-date">{{date}}</div> -->
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .predictions-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%; 
+    }
+
+    .textboxes-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px; 
+        margin-top: 20px;
+    }
+
+    .textbox {
+        padding: 10px;
+        font-size: 1rem;
+        border: 2px solid #aaa;
+        border-radius: 5px;
+        transition: border-color 0.3s ease;
+        text-align: center;
+    }
+
+    .maint-date {
+        font-size: 1.5rem;
+    }
+</style>
+
+
+{% endblock %}
