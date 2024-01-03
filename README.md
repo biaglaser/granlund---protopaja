@@ -1,4 +1,5 @@
-This project focuses on the development and implementation of an Internet of Things 
+This project was completed for a course at Aalto University and its problem was proposed by 
+Granlund OY. It focuses on the development and implementation of an Internet of Things 
 (IoT) device designed to monitor structural parameters of network base stations, 
 often located in remote and hard-to-reach areas. The device was developed during 
 Aalto University’s Protopaja course with the aim is to digitize and automate the 
